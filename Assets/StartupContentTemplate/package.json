@@ -1,0 +1,19 @@
+{
+  "name": "com.brice_vn_unity.startupcontenttemplate",
+  "version": "1.0.0",
+  "displayName": "Startup Content Template",
+  "description": "Easely create your startup folders",
+  "unity": "2022.3",
+  "unityRelease": "6f1",
+  "author": {
+    "name": "Brice Vayne",
+    "email": "vayne.brice+unity@gmail.com",
+    "url": "https://www.unity3d.com"
+  },
+  "hideInEditor": false,
+  "keywords": [
+    "keyword1",
+    "keyword2",
+    "keyword3"
+  ]
+}

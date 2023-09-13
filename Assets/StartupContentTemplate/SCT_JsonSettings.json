@@ -1,0 +1,27 @@
+{
+  "Directories": [
+    "Addressables",
+    "Animations",
+    "Audios",
+    "Graphics",
+    "Graphics/Fonts",
+    "Graphics/Materials",
+    "Graphics/Models",
+    "Graphics/Shaders",
+    "Graphics/Textures",
+    "InputActions",
+    "Plugins",
+    "Prefabs",
+    "Resources",
+    "Scenes",
+    "Scenes/Demo",
+    "Scenes/Level",
+    "Scenes/Menu",
+    "Scripts",
+    "Scripts/Editor",
+    "Scripts/ScriptableObjects",
+    "Settings",
+    "ShaderGraphs",
+    "StreamingAssets"
+  ]
+}
