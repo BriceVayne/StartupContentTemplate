@@ -1,11 +1,16 @@
-TitleElement {
+:root
+{
+    --darkColor: black;
     margin: 5px;
     padding: 5px 0 5px 0;
+}
+
+TitleElement
+{
     font-size: 20px;
-    color: black;
-    border-color: black;
+    color: var(--darkColor);
+    border-color: var(--darkColor);
     border-width: 2px 0 2px 0;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
-
 }

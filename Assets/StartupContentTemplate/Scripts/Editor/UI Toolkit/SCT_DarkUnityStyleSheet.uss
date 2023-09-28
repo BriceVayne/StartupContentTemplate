@@ -1,0 +1,32 @@
+:root
+{
+    --darkColor: white;
+    --backgroundColor : #313131;
+    margin: 5px;
+    padding: 5px 0 5px 0;
+}
+
+#RootBackground
+{
+    background-color: #383838;
+}
+
+#Space
+{
+    margin: 10px;
+}
+
+#Block
+{
+    background-color: var(--backgroundColor);
+}
+
+TitleElement
+{
+    font-size: 20px;
+    color: var(--darkColor);
+    border-color: var(--darkColor);
+    border-width: 2px 0 2px 0;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}

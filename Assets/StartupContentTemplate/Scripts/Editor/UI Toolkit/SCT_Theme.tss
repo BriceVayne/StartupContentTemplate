@@ -1,0 +1,6 @@
+@import url("/Assets/UnityDefaultRuntimeTheme.tss");
+
+@import url("SCT_DarkUnityStyleSheet.uss");
+@import url("SCT_LightUnityStyleSheet.uss");
+
+VisualElement {}

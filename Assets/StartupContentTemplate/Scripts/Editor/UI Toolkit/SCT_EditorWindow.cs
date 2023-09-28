@@ -1,7 +1,10 @@
+using System.Runtime.Remoting.Messaging;
 using UnityEditor;
+using UnityEditor.Search;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ObjectField = UnityEditor.UIElements.ObjectField;
 
 namespace SCT
 {
@@ -10,13 +13,17 @@ namespace SCT
     /// </summary>
     public class SCT_EditorWindow : EditorWindow
     {
-        [SerializeField] private VisualTreeAsset m_VisualTreeAsset = default;
-        [SerializeField] private StyleSheet m_StyleSheet = default;
+        [SerializeField] private StyleSheet m_LightStyleSheet = default;
+        [SerializeField] private StyleSheet m_DarkStyleSheet = default;
 
         private static readonly string WINDOW_TITLE = "Startup Content";
         private static readonly Vector2 WINDOW_START_SIZE = new Vector2(300, 600);
         private static readonly Vector2 WINDOW_START_POS = new Vector2(400, 0);
 
+        private StyleSheet currentStyleSheet;
+        private VisualElement m_Header;
+        private VisualElement m_Body;
+        private VisualElement m_Footer;
         private ObjectField m_ObjectField;
         private HelpBox m_HelpBox;
 
@@ -31,27 +38,29 @@ namespace SCT
 
         public void CreateGUI()
         {
-            VisualElement root = rootVisualElement;
+            currentStyleSheet = EditorGUIUtility.isProSkin ? m_DarkStyleSheet : m_LightStyleSheet;
 
-            m_ObjectField = new ObjectField("Scriptable Datas");
+            CreateHierarchy();
 
-            m_ObjectField.RegisterCallback<ChangeEvent<Object>>((evt) =>
-            {
-                if (evt.newValue.GetType() != typeof(ScriptableDatas))
-                {
-                    m_ObjectField.value = null;
-                    PrintMessage("Only SCT_ScriptableDatas supported", HelpBoxMessageType.Warning);
-                }
-            });
+            m_Header.Add(CreateTitle("Datas"));
+            m_Header.Add(CreateAndBindObjectField());
 
-            root.Add(m_ObjectField);
+            m_Body.Add(CreateTitle("Folders"));
 
-            var mainTitle = new TitleElement("Folders");
-            root.Add(mainTitle);
+            m_Footer.Add(CreateHelpBox());
+        }
+
+        private void CreateHierarchy()
+        {
+            m_Header = CreateBlock();
+            m_Body = CreateBlock();
+            m_Footer = CreateBlock();
 
 
-            m_HelpBox = new HelpBox("This is a help box", HelpBoxMessageType.Info);
-            root.Add(m_HelpBox);
+            rootVisualElement.name = "#RootBackground";
+            rootVisualElement.Add(m_Header);
+            rootVisualElement.Add(m_Body);
+            rootVisualElement.Add(m_Footer);
         }
 
         private void PrintMessage(string message, HelpBoxMessageType messageType)
@@ -62,10 +71,43 @@ namespace SCT
                 m_HelpBox.messageType = messageType;
             }
         }
+
+        private VisualElement CreateBlock()
+        {
+            var part = new VisualElement();
+            part.name = "Block";
+            part.styleSheets.Add(currentStyleSheet);
+            return part;
+        }
+
+        private VisualElement CreateTitle(string title)
+        {
+            var titleElement = new TitleElement(title);
+            titleElement.styleSheets.Add(currentStyleSheet);
+            return titleElement;
+        }
+
+        private VisualElement CreateAndBindObjectField()
+        {
+            m_ObjectField = new ObjectField("Scriptable Datas Asset");
+            m_ObjectField.name="Space";
+            m_ObjectField.styleSheets.Add(currentStyleSheet);
+            m_ObjectField.RegisterCallback<ChangeEvent<Object>>((evt) =>
+            {
+                if (evt.newValue.GetType() != typeof(ScriptableDatas))
+                {
+                    m_ObjectField.value = null;
+                    PrintMessage("Only SCT_ScriptableDatas supported", HelpBoxMessageType.Warning);
+                }
+            });
+
+            return m_ObjectField;
+        }
+
+        private VisualElement CreateHelpBox()
+        {
+            var helpBox = new HelpBox("This is a help box", HelpBoxMessageType.Info);
+            return helpBox;
+        }
     }
 }
-
-
-
-
-

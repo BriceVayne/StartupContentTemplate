@@ -5,8 +5,9 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - m_ViewDataDictionary: {instanceID: 0}
-  - m_VisualTreeAsset: {fileID: 9197481963319205126, guid: 5e13e41785d1a7a40b4da0c887bae682, type: 3}
-  - m_StyleSheet: {fileID: 7433441132597879392, guid: cca767673a97fa547a25c3c969abaac0, type: 3}
+  - m_ThemeStyleSheet: {fileID: -4733365628477956816, guid: 853dbf73399ef5e4788c0ab8df76f6d0, type: 3}
+  - m_LightStyleSheet: {fileID: 7433441132597879392, guid: cca767673a97fa547a25c3c969abaac0, type: 3}
+  - m_DarkStyleSheet: {fileID: 7433441132597879392, guid: ff3c300c9eee83a44ac480ef1b609b47, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
