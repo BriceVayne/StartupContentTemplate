@@ -1,13 +1,13 @@
 using System.Linq;
 using System;
 
-namespace StartupContentTemplate
+namespace SCT
 {
     /// <summary>
-    /// SCT Directory representation.
+    /// SCT Folder representation.
     /// </summary>
     [Serializable]
-    public class SCT_Directory
+    public class Folder
     {
         /// <summary>
         /// Folder name.
@@ -33,7 +33,7 @@ namespace StartupContentTemplate
         /// Setup data from path.
         /// </summary>
         /// <param name="path"></param>
-        public SCT_Directory(string path)
+        public Folder(string path)
         {
             string[] splitPath = path.Split('/');
 

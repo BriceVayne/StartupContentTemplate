@@ -1,5 +1,5 @@
+using SCT;
 using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,25 +8,25 @@ namespace StartupContentTemplate
     /// <summary>
     /// SCT Function used to make the editor tool.
     /// </summary>
-    public static class SCT_EditorFunction
+    public static class SCT_Library
     {
         /// <summary>
         /// Draw the toggle list with a label.
         /// </summary>
         /// <param name="list">A directory's list.</param>
         /// <param name="path">The root path where folders should exists. This param is to check if a folder already exist and should be check.</param>
-        public static void DrawToggleDirectories(List<SCT_Directory> list, string path)
+        public static void DrawToggleDirectories(List<Folder> list, string path)
         {
             if (list != null && list.Count > 0)
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    SCT_Directory dir = list[i];
+                    Folder dir = list[i];
                     string folderPath = path + "/" + dir.Path;
                     EditorGUILayout.BeginHorizontal();
                     GUILayout.Space(dir.Depth * 20f);
 
-                    dir.ShouldCreate = EditorGUILayout.Toggle(Directory.Exists(folderPath) ? true : dir.ShouldCreate, GUILayout.Width(20f));
+                    dir.ShouldCreate = EditorGUILayout.Toggle(System.IO.Directory.Exists(folderPath) ? true : dir.ShouldCreate, GUILayout.Width(20f));
 
                     EditorGUILayout.LabelField(dir.Name);
                     EditorGUILayout.EndHorizontal();
@@ -83,19 +83,19 @@ namespace StartupContentTemplate
         /// </summary>
         /// <param name="list">A directory's list.</param>
         /// <param name="folderPath">The root path where folders should exists.</param>
-        public static void CreateDirectories(List<SCT_Directory> list, string folderPath)
+        public static void CreateDirectories(List<Folder> list, string folderPath)
         {
             if (list != null && list.Count > 0)
             {
                 for (int i = 0; i < list.Count; i++)
                 {
-                    SCT_Directory dir = list[i];
+                    Folder dir = list[i];
                     if (dir.ShouldCreate)
                     {
                         string dirPath = folderPath + "/" + dir.Path;
 
-                        if (!Directory.Exists(dirPath))
-                            Directory.CreateDirectory(dirPath);
+                        if (!System.IO.Directory.Exists(dirPath))
+                            System.IO.Directory.CreateDirectory(dirPath);
                     }
                 }
             }

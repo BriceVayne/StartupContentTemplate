@@ -1,3 +1,4 @@
+using SCT;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -17,26 +18,17 @@ namespace StartupContentTemplate
         private const string SETTING_PATH = "Packages/com.brice_vn_unity.startupcontenttemplate/SCT_JsonSettings.json";
 
         private SCT_JSonContainer jsonRoot;
-        private List<SCT_Directory> directories;
-
-        [MenuItem("Tools/Startup Content Template")]
-        private static void ShowWindow()
-        {
-            SCT_EditorWindow window = GetWindow<SCT_EditorWindow>();
-            window.titleContent = new GUIContent(WINDOW_TITLE);
-            window.minSize = WINDOW_START_SIZE;
-            window.position = new Rect(WINDOW_START_POS, WINDOW_START_SIZE);
-        }
+        private List<Folder> directories;
 
         private void OnEnable()
         {
-            directories = new List<SCT_Directory>();
+            directories = new List<Folder>();
 
             string path = Path.GetFullPath(SETTING_PATH);
             var jsonReader = File.ReadAllText(path);
             jsonRoot = JsonUtility.FromJson<SCT_JSonContainer>(jsonReader);
             jsonRoot.Directories.Sort();
-            jsonRoot.Directories.ForEach(dirPath => directories.Add(new SCT_Directory(dirPath)));
+            jsonRoot.Directories.ForEach(dirPath => directories.Add(new Folder(dirPath)));
         }
 
         private void OnGUI()
@@ -53,8 +45,8 @@ namespace StartupContentTemplate
 
         private void GenerateBody()
         {
-            SCT_EditorFunction.DrawTitle("Directories", Color.gray);
-            SCT_EditorFunction.DrawToggleDirectories(directories, ASSETS_PATH_EDITOR);
+            SCT_Library.DrawTitle("Directories", Color.gray);
+            SCT_Library.DrawToggleDirectories(directories, ASSETS_PATH_EDITOR);
 
             EditorGUILayout.Space(10f);
             EditorGUILayout.BeginHorizontal();
@@ -73,7 +65,7 @@ namespace StartupContentTemplate
 
             if (GUILayout.Button("Generate !"))
             {
-                SCT_EditorFunction.CreateDirectories(directories, ASSETS_PATH_EDITOR);
+                SCT_Library.CreateDirectories(directories, ASSETS_PATH_EDITOR);
                 AssetDatabase.Refresh();
             }
 
