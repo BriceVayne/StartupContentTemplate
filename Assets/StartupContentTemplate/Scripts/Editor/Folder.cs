@@ -1,7 +1,7 @@
 using System.Linq;
 using System;
 
-namespace SCT
+namespace SCT_Depreciated
 {
     /// <summary>
     /// SCT Folder representation.

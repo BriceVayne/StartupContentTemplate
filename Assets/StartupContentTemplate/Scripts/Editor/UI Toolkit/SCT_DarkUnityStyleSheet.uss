@@ -30,3 +30,33 @@ TitleElement
     -unity-font-style: bold;
     -unity-text-align: middle-center;
 }
+
+#TreeView
+{
+    margin: 0 5px 0 5px;
+    padding: 0;
+}
+
+#ItemView
+{
+   margin: 0;
+   padding: 0;
+   flex-direction: row;
+   align-items: center;
+}
+
+#ItemView #Icon
+{
+    width: 14px;
+    height: 14px;
+    margin: 5px;
+    padding: 0;
+}
+
+#ItemView #Label
+{
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+    color: var(--darkColor);
+}

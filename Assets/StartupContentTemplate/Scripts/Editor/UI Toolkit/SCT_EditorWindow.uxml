@@ -1,4 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/StartupContentTemplate/Scripts/Editor/UI%20Toolkit/SCT_LightUnityStyleSheet.uss?fileID=7433441132597879392&amp;guid=cca767673a97fa547a25c3c969abaac0&amp;type=3#SCT_LightUnityStyleSheet" />
-    <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" class="Exemple" style="background-color: rgb(56, 56, 56);" />
+    <Style src="project://database/Assets/StartupContentTemplate/Scripts/Editor/UI%20Toolkit/SCT_DarkUnityStyleSheet.uss?fileID=7433441132597879392&amp;guid=ff3c300c9eee83a44ac480ef1b609b47&amp;type=3#SCT_DarkUnityStyleSheet" />
+    <ui:VisualElement name="TreeItemElement" style="flex-direction: row; align-items: center; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+        <ui:VisualElement name="Icon" style="background-image: url(&apos;project://database/Assets/StartupContentTemplate/Graphics/Folder.svg?fileID=7388822144124034973&amp;guid=2e67fc444c2eabc49a88a9ecb2f29b3f&amp;type=3#Folder&apos;); -unity-background-scale-mode: scale-to-fit; width: 20px; height: 20px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;" />
+        <ui:Label text="Label" enable-rich-text="false" name="Label" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;" />
+    </ui:VisualElement>
 </ui:UXML>

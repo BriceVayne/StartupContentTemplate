@@ -1,10 +1,8 @@
-using System.Runtime.Remoting.Messaging;
+using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.Search;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using ObjectField = UnityEditor.UIElements.ObjectField;
 
 namespace SCT
 {
@@ -17,6 +15,7 @@ namespace SCT
         [SerializeField] private StyleSheet m_DarkStyleSheet = default;
 
         private static readonly string WINDOW_TITLE = "Startup Content";
+        private static readonly string ASSETS_PATH_EDITOR = Application.dataPath;
         private static readonly Vector2 WINDOW_START_SIZE = new Vector2(300, 600);
         private static readonly Vector2 WINDOW_START_POS = new Vector2(400, 0);
 
@@ -25,7 +24,9 @@ namespace SCT
         private VisualElement m_Body;
         private VisualElement m_Footer;
         private ObjectField m_ObjectField;
+        private TreeView m_TreeView;
         private HelpBox m_HelpBox;
+        private List<Foolder> m_Directories;
 
         [MenuItem("Tools/Startup Content Template")]
         public static void ShowWindow()
@@ -34,6 +35,11 @@ namespace SCT
             window.titleContent = new GUIContent(WINDOW_TITLE);
             window.minSize = WINDOW_START_SIZE;
             window.position = new Rect(WINDOW_START_POS, WINDOW_START_SIZE);
+        }
+
+        private void OnEnable()
+        {
+            m_Directories = new List<Foolder>();
         }
 
         public void CreateGUI()
@@ -55,7 +61,6 @@ namespace SCT
             m_Header = CreateBlock();
             m_Body = CreateBlock();
             m_Footer = CreateBlock();
-
 
             rootVisualElement.name = "#RootBackground";
             rootVisualElement.Add(m_Header);
@@ -90,24 +95,82 @@ namespace SCT
         private VisualElement CreateAndBindObjectField()
         {
             m_ObjectField = new ObjectField("Scriptable Datas Asset");
-            m_ObjectField.name="Space";
+            m_ObjectField.name = "Space";
             m_ObjectField.styleSheets.Add(currentStyleSheet);
-            m_ObjectField.RegisterCallback<ChangeEvent<Object>>((evt) =>
+            m_ObjectField.objectType = typeof(ScriptableDatas);
+            m_ObjectField.RegisterValueChangedCallback((callback) =>
             {
-                if (evt.newValue.GetType() != typeof(ScriptableDatas))
+                m_Directories.Clear();
+
+                var result = callback.newValue as ScriptableDatas;
+                if (result != null)
                 {
-                    m_ObjectField.value = null;
-                    PrintMessage("Only SCT_ScriptableDatas supported", HelpBoxMessageType.Warning);
+                    m_Directories = result.Foolders;
+                    m_Body.Add(CreateTreeView());
                 }
             });
-
             return m_ObjectField;
+        }
+
+        private VisualElement CreateTreeView()
+        {
+            int id = 0;
+            var roots = new List<TreeViewItemData<Foolder>>(m_Directories.Count); // Main list
+
+            foreach (var folders in m_Directories) // Run through the main list
+            {
+                // For each elem, create new Item Data to subfolder
+                var foldersInGroup = new List<TreeViewItemData<Foolder>>(folders.Content.Count);
+                foreach (var folder in folders.Content) // Run through the sub list
+                    foldersInGroup.Add(new TreeViewItemData<Foolder>(id++, folder)); // Create elem into sublist
+
+                // Add sublist to main list
+                roots.Add(new TreeViewItemData<Foolder>(id++, folders, foldersInGroup));
+            }
+
+            m_TreeView = new TreeView();
+            m_TreeView.name = "TreeView";
+            m_TreeView.styleSheets.Add(currentStyleSheet);
+            m_TreeView.SetRootItems(roots);
+
+            m_TreeView.makeItem = () => 
+            {
+                VisualElement visualElement = new VisualElement();
+                visualElement.name = "ItemView";
+
+                Image img = new Image();
+                img.name = "Icon";
+                img.styleSheets.Add(currentStyleSheet);
+
+                Label label = new Label();
+                label.name = "Label";
+                label.styleSheets.Add(currentStyleSheet);
+
+                visualElement.Add(img);
+                visualElement.Add(label);
+                return visualElement;
+            };
+
+            m_TreeView.bindItem = (VisualElement element, int index) =>
+            {
+                Texture icon;
+
+                if(m_TreeView.viewController.IsExpandedByIndex(index))
+                    icon = EditorGUIUtility.IconContent("FolderOpened Icon").image;
+                else
+                    icon = EditorGUIUtility.IconContent("Folder Icon").image;
+
+                element.Q<Image>().style.backgroundImage = (StyleBackground)icon;
+                element.Q<Label>().text = m_TreeView.GetItemDataForIndex<Foolder>(index).Name;
+            };
+
+            return m_TreeView;
         }
 
         private VisualElement CreateHelpBox()
         {
-            var helpBox = new HelpBox("This is a help box", HelpBoxMessageType.Info);
-            return helpBox;
+            m_HelpBox = new HelpBox("This is a help box", HelpBoxMessageType.Info);
+            return m_HelpBox;
         }
     }
 }
