@@ -47,8 +47,8 @@ TitleElement
 
 #ItemView #Icon
 {
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
     margin: 5px;
     padding: 0;
 }
@@ -59,4 +59,11 @@ TitleElement
     padding: 0;
     font-size: 12px;
     color: var(--darkColor);
+}
+
+#Toggle
+{
+    align-self: center;
+    margin: 5px;
+    padding: 0;
 }

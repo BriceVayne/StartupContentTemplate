@@ -24,9 +24,9 @@ namespace SCT
         private VisualElement m_Body;
         private VisualElement m_Footer;
         private ObjectField m_ObjectField;
-        private TreeView m_TreeView;
+        private MultiColumnTreeView m_TreeView;
         private HelpBox m_HelpBox;
-        private List<Foolder> m_Directories;
+        private List<Folder> m_Directories;
 
         [MenuItem("Tools/Startup Content Template")]
         public static void ShowWindow()
@@ -39,7 +39,7 @@ namespace SCT
 
         private void OnEnable()
         {
-            m_Directories = new List<Foolder>();
+            m_Directories = new List<Folder>();
         }
 
         public void CreateGUI()
@@ -115,25 +115,31 @@ namespace SCT
         private VisualElement CreateTreeView()
         {
             int id = 0;
-            var roots = new List<TreeViewItemData<Foolder>>(m_Directories.Count); // Main list
+            var roots = new List<TreeViewItemData<Folder>>(m_Directories.Count); // Main list
 
             foreach (var folders in m_Directories) // Run through the main list
             {
                 // For each elem, create new Item Data to subfolder
-                var foldersInGroup = new List<TreeViewItemData<Foolder>>(folders.Content.Count);
+                var foldersInGroup = new List<TreeViewItemData<Folder>>(folders.Content.Count);
                 foreach (var folder in folders.Content) // Run through the sub list
-                    foldersInGroup.Add(new TreeViewItemData<Foolder>(id++, folder)); // Create elem into sublist
+                    foldersInGroup.Add(new TreeViewItemData<Folder>(id++, folder)); // Create elem into sublist
 
                 // Add sublist to main list
-                roots.Add(new TreeViewItemData<Foolder>(id++, folders, foldersInGroup));
+                roots.Add(new TreeViewItemData<Folder>(id++, folders, foldersInGroup));
             }
 
-            m_TreeView = new TreeView();
+            Columns clmns = new Columns();
+            Column name = new Column() { name = "FolderName", stretchable = true, minWidth = 100, sortable = true, title = "Folder Name", };
+            Column create = new Column() { name = "ShouldCreate", stretchable = true, minWidth = 110, maxWidth = 110, sortable = true, title = "Should Create ?" };
+            clmns.Add(name);
+            clmns.Add(create);
+
+            m_TreeView = new MultiColumnTreeView(clmns);
             m_TreeView.name = "TreeView";
             m_TreeView.styleSheets.Add(currentStyleSheet);
             m_TreeView.SetRootItems(roots);
 
-            m_TreeView.makeItem = () => 
+            m_TreeView.columns["FolderName"].makeCell = () =>
             {
                 VisualElement visualElement = new VisualElement();
                 visualElement.name = "ItemView";
@@ -150,18 +156,35 @@ namespace SCT
                 visualElement.Add(label);
                 return visualElement;
             };
+            m_TreeView.columns["ShouldCreate"].makeCell = () =>
+            {
+                Toggle toggle = new Toggle();
+                toggle.name = "Toggle";
 
-            m_TreeView.bindItem = (VisualElement element, int index) =>
+                return toggle;
+            };
+
+            m_TreeView.columns["FolderName"].bindCell = (VisualElement element, int index) =>
             {
                 Texture icon;
-
-                if(m_TreeView.viewController.IsExpandedByIndex(index))
-                    icon = EditorGUIUtility.IconContent("FolderOpened Icon").image;
+                if (!m_TreeView.viewController.HasChildrenByIndex(index))
+                    icon = EditorGUIUtility.IconContent("FolderEmpty On Icon").image;
                 else
-                    icon = EditorGUIUtility.IconContent("Folder Icon").image;
+                {
+                    if (m_TreeView.viewController.IsExpandedByIndex(index))
+                        icon = EditorGUIUtility.IconContent("FolderOpened On Icon").image;
+                    else
+                        icon = EditorGUIUtility.IconContent("Folder On Icon").image;
+                }
 
                 element.Q<Image>().style.backgroundImage = (StyleBackground)icon;
-                element.Q<Label>().text = m_TreeView.GetItemDataForIndex<Foolder>(index).Name;
+                element.Q<Label>().text = m_TreeView.GetItemDataForIndex<Folder>(index).Name;
+            };
+            m_TreeView.columns["ShouldCreate"].bindCell = (VisualElement element, int index) =>
+            {
+
+
+                (element as Toggle).value = m_TreeView.GetItemDataForIndex<Folder>(index).ShouldCreate;
             };
 
             return m_TreeView;
