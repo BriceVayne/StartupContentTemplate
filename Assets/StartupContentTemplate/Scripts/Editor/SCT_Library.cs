@@ -1,15 +1,31 @@
 using SCT;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-namespace StartupContentTemplate
+namespace SCT
 {
     /// <summary>
     /// SCT Function used to make the editor tool.
     /// </summary>
     public static class SCT_Library
     {
+        public static T Create<T>(string name, StyleSheet style) where T : VisualElement, new()
+        {
+            var element = new T() { name = name };
+            element.styleSheets.Add(style);
+            return element;
+        }
+
+        public static TitleElement Create(string title, string name, StyleSheet style)
+        {
+            var element = Create<TitleElement>(name, style);
+            element.text = title;
+            return element;
+        }
+
         /// <summary>
         /// Create directories.
         /// </summary>

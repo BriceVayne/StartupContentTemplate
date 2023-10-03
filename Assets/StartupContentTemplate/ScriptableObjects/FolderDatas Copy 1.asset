@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9150b5e381218fe48a8a87832d45cdcb, type: 3}
-  m_Name: FolderDatas
+  m_Name: FolderDatas Copy 1
   m_EditorClassIdentifier: 
   Foolders:
   - Name: Addressables
@@ -26,7 +26,9 @@ MonoBehaviour:
     - Name: Materials
       Content: []
     - Name: Models
-      Content: []
+      Content:
+      - Name: Maya
+        Content: []
     - Name: Shaders
       Content: []
     - Name: Textures

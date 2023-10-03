@@ -8,10 +8,6 @@ namespace SCT
 
         public new class UxmlTraits : TextElement.UxmlTraits { }
 
-        public new static readonly string ussClassName = "sct-label-title";
-
-        public TitleElement() : base() { }
-
-        public TitleElement(string title) : base(title) { }
+        public TitleElement() : base() { this.text = this.name; }
     }
 }

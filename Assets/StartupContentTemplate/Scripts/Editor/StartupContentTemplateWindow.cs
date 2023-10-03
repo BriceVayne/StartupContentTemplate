@@ -9,94 +9,73 @@ namespace SCT
     /// <summary>
     /// The SCT editor window
     /// </summary>
-    public class SCT_EditorWindow : EditorWindow
+    public partial class StartupContentTemplateWindow : EditorWindow
     {
-        [SerializeField] private StyleSheet m_LightStyleSheet = default;
-        [SerializeField] private StyleSheet m_DarkStyleSheet = default;
+        [SerializeField] private StyleSheet m_StyleSheet = default;
 
-        private static readonly string WINDOW_TITLE = "Startup Content";
         private static readonly string ASSETS_PATH_EDITOR = Application.dataPath;
-        private static readonly Vector2 WINDOW_START_SIZE = new Vector2(300, 600);
-        private static readonly Vector2 WINDOW_START_POS = new Vector2(400, 0);
 
-        private StyleSheet currentStyleSheet;
+        private List<Folder> m_Directories;
+
         private VisualElement m_Header;
         private VisualElement m_Body;
         private VisualElement m_Footer;
+
+
         private ObjectField m_ObjectField;
         private MultiColumnTreeView m_TreeView;
         private HelpBox m_HelpBox;
-        private List<Folder> m_Directories;
-
-        [MenuItem("Tools/Startup Content Template")]
-        public static void ShowWindow()
-        {
-            SCT_EditorWindow window = GetWindow<SCT_EditorWindow>();
-            window.titleContent = new GUIContent(WINDOW_TITLE);
-            window.minSize = WINDOW_START_SIZE;
-            window.position = new Rect(WINDOW_START_POS, WINDOW_START_SIZE);
-        }
+        
 
         private void OnEnable()
         {
             m_Directories = new List<Folder>();
         }
 
-        public void CreateGUI()
+        private void OnDisable()
         {
-            currentStyleSheet = EditorGUIUtility.isProSkin ? m_DarkStyleSheet : m_LightStyleSheet;
-
-            CreateHierarchy();
-
-            m_Header.Add(CreateTitle("Datas"));
-            m_Header.Add(CreateAndBindObjectField());
-
-            m_Body.Add(CreateTitle("Folders"));
-
-            m_Footer.Add(CreateHelpBox());
+            m_Directories.Clear();
         }
 
-        private void CreateHierarchy()
+        public void CreateGUI()
         {
-            m_Header = CreateBlock();
-            m_Body = CreateBlock();
-            m_Footer = CreateBlock();
+            SetupRoot();
+            SetupHeader();
 
-            rootVisualElement.name = "#RootBackground";
+            m_Body.Add(SCT_Library.Create("Folders", "Title", m_StyleSheet));
+
+            m_Footer.Add(SCT_Library.Create("Options", "Title", m_StyleSheet));
+        }
+
+        private void SetupRoot()
+        {
+            CreateBlocks();
+
+            rootVisualElement.name = "Main";
+            rootVisualElement.styleSheets.Add(m_StyleSheet);
             rootVisualElement.Add(m_Header);
             rootVisualElement.Add(m_Body);
             rootVisualElement.Add(m_Footer);
         }
 
-        private void PrintMessage(string message, HelpBoxMessageType messageType)
+        private void CreateBlocks()
         {
-            if (m_HelpBox != null)
-            {
-                m_HelpBox.text = message;
-                m_HelpBox.messageType = messageType;
-            }
+            m_Header = SCT_Library.Create<VisualElement>("Block", m_StyleSheet);
+            m_Body = SCT_Library.Create<VisualElement>("Block", m_StyleSheet);
+            m_Footer = SCT_Library.Create<VisualElement>("Block", m_StyleSheet);
         }
 
-        private VisualElement CreateBlock()
+        private void SetupHeader()
         {
-            var part = new VisualElement();
-            part.name = "Block";
-            part.styleSheets.Add(currentStyleSheet);
-            return part;
-        }
-
-        private VisualElement CreateTitle(string title)
-        {
-            var titleElement = new TitleElement(title);
-            titleElement.styleSheets.Add(currentStyleSheet);
-            return titleElement;
+            m_Header.Add(SCT_Library.Create("Datas", "Title", m_StyleSheet));
+            m_Header.Add(CreateAndBindObjectField());
         }
 
         private VisualElement CreateAndBindObjectField()
         {
             m_ObjectField = new ObjectField("Scriptable Datas Asset");
             m_ObjectField.name = "Space";
-            m_ObjectField.styleSheets.Add(currentStyleSheet);
+            m_ObjectField.styleSheets.Add(m_StyleSheet);
             m_ObjectField.objectType = typeof(ScriptableDatas);
             m_ObjectField.RegisterValueChangedCallback((callback) =>
             {
@@ -106,7 +85,7 @@ namespace SCT
                 if (result != null)
                 {
                     m_Directories = result.Foolders;
-                    m_Body.Add(CreateTreeView());
+                    //m_Body.Add(CreateTreeView());
                 }
             });
             return m_ObjectField;
@@ -136,7 +115,7 @@ namespace SCT
 
             m_TreeView = new MultiColumnTreeView(clmns);
             m_TreeView.name = "TreeView";
-            m_TreeView.styleSheets.Add(currentStyleSheet);
+            m_TreeView.styleSheets.Add(m_StyleSheet);
             m_TreeView.SetRootItems(roots);
 
             m_TreeView.columns["FolderName"].makeCell = () =>
@@ -146,11 +125,11 @@ namespace SCT
 
                 Image img = new Image();
                 img.name = "Icon";
-                img.styleSheets.Add(currentStyleSheet);
+                img.styleSheets.Add(m_StyleSheet);
 
                 Label label = new Label();
                 label.name = "Label";
-                label.styleSheets.Add(currentStyleSheet);
+                label.styleSheets.Add(m_StyleSheet);
 
                 visualElement.Add(img);
                 visualElement.Add(label);
@@ -182,8 +161,6 @@ namespace SCT
             };
             m_TreeView.columns["ShouldCreate"].bindCell = (VisualElement element, int index) =>
             {
-
-
                 (element as Toggle).value = m_TreeView.GetItemDataForIndex<Folder>(index).ShouldCreate;
             };
 

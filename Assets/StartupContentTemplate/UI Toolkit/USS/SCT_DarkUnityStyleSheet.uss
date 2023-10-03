@@ -1,14 +1,18 @@
 :root
 {
-    --darkColor: white;
-    --backgroundColor : #313131;
-    margin: 5px;
-    padding: 5px 0 5px 0;
+    --mainColor: white;
 }
 
-#RootBackground
+#Main
 {
+    padding: 5px 10px 5px 10px;
     background-color: #383838;
+}
+
+#Block
+{
+    margin: 5px 0 5px 0;
+    background-color: #313131;
 }
 
 #Space
@@ -16,16 +20,15 @@
     margin: 10px;
 }
 
-#Block
-{
-    background-color: var(--backgroundColor);
-}
+
 
 TitleElement
 {
+    padding: 5px 0 5px 0;
+    margin: 0;
     font-size: 20px;
-    color: var(--darkColor);
-    border-color: var(--darkColor);
+    color: var(--mainColor);
+    border-color: var(--mainColor);
     border-width: 2px 0 2px 0;
     -unity-font-style: bold;
     -unity-text-align: middle-center;
@@ -58,7 +61,7 @@ TitleElement
     margin: 0;
     padding: 0;
     font-size: 12px;
-    color: var(--darkColor);
+    color: var(--mainColor);
 }
 
 #Toggle

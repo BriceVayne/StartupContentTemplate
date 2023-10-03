@@ -1,15 +1,11 @@
-using SCT;
-using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
-using UnityEngine;
 
 namespace StartupContentTemplate
 {
     /// <summary>
     /// The SCT editor window
     /// </summary>
-    public class SCT_EditorWindow : EditorWindow
+    public class SCT_EditorWindow_Backup : EditorWindow
     {
         //private static readonly Vector2 WINDOW_START_SIZE = new Vector2(300, 600);
         //private static readonly Vector2 WINDOW_START_POS = new Vector2(400, 0);
