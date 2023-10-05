@@ -1,8 +1,9 @@
-using SCT;
-using System.Collections.Generic;
-using UnityEditor;
+using Codice.CM.Common;
+using System;
+using System.Xml.Linq;
+using TMPro;
+using UnityEditor.IMGUI.Controls;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SCT
@@ -12,6 +13,8 @@ namespace SCT
     /// </summary>
     public static class SCT_Library
     {
+        public static EventCallback<ChangeEvent<ScriptableDatas>> EventCallback = null;
+
         public static T Create<T>(string name, StyleSheet style) where T : VisualElement, new()
         {
             var element = new T() { name = name };
@@ -23,6 +26,36 @@ namespace SCT
         {
             var element = Create<TitleElement>(name, style);
             element.text = title;
+            return element;
+        }
+
+        public static Button CreateButton(string title, string name, StyleSheet style)
+        {
+            var element = Create<Button>(name, style);
+            element.text = title;
+            return element;
+        }
+
+        public static Toggle CreateToggle(string title, string name, StyleSheet style)
+        {
+            var element = Create<Toggle>(name, style);
+            element.label = title;
+            return element;
+        }
+
+        public static ObjectField Create(Type objectType, string label, string name, StyleSheet style)
+        {
+            var element = Create<ObjectField>(name, style);
+            element.label = label;
+            element.objectType = objectType;
+            return element;
+        }
+
+        public static MultiColumnTreeView Create(Columns columns, string name, StyleSheet style)
+        {
+            var element = new MultiColumnTreeView(columns);
+            element.name = name;
+            element.styleSheets.Add(style);
             return element;
         }
 

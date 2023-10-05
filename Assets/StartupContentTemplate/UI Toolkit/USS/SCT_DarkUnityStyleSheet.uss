@@ -18,9 +18,8 @@
 #Space
 {
     margin: 10px;
+    font-size: 16px;
 }
-
-
 
 TitleElement
 {
@@ -36,7 +35,7 @@ TitleElement
 
 #TreeView
 {
-    margin: 0 5px 0 5px;
+    margin: 5px;
     padding: 0;
 }
 
@@ -60,13 +59,21 @@ TitleElement
 {
     margin: 0;
     padding: 0;
-    font-size: 12px;
+    font-size: 14px;
     color: var(--mainColor);
 }
 
-#Toggle
+#ItemView #Toggle
 {
     align-self: center;
     margin: 5px;
     padding: 0;
+}
+
+#Toggle
+{
+    margin: 5px;
+    padding: 0;
+    font-size: 16px;
+    color: var(--mainColor);
 }

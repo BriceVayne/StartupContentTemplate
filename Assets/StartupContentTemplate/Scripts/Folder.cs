@@ -14,5 +14,10 @@ namespace SCT
         public string Name;
         public List<Folder> Content;
     }
-}
 
+    [Serializable]
+    public class GroupFolder
+    {
+
+    }
+}
